@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './client/index.js',
+  mode: 'development',
+  entry: './client/index.tsx',
   output: {
     path: '/',
     filename: 'bundle.js'
@@ -10,9 +11,14 @@ module.exports = {
   module: {
     rules: [
       {
-        use: 'babel-loader',
-        test: /\.js$/,
-        exclude: /node_modules/
+        test: /\.(js|jsx)?$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.(ts|tsx)?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         use: ['style-loader', 'css-loader'],
@@ -20,9 +26,13 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: 'client/index.html'
     })
-  ]
+  ],
+  devtool: 'eval',
 };
